@@ -1,0 +1,74 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(VoiceControlApp());
+}
+
+class VoiceControlApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Voice Control Home System',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String voiceCommand = '';
+  bool lightOn = false;
+  bool fanOn = false;
+
+  void handleCommand(String command) {
+    setState(() {
+      voiceCommand = command;
+      if (command.contains('light on')) lightOn = true;
+      else if (command.contains('light off')) lightOn = false;
+      else if (command.contains('fan on')) fanOn = true;
+      else if (command.contains('fan off')) fanOn = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Voice Control Home System')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Last Command: $voiceCommand'),
+            SwitchListTile(
+              title: Text('Light'),
+              value: lightOn,
+              onChanged: (val) => setState(() => lightOn = val),
+            ),
+            SwitchListTile(
+              title: Text('Fan'),
+              value: fanOn,
+              onChanged: (val) => setState(() => fanOn = val),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Example command simulation
+                handleCommand('light on');
+              },
+              child: Text('Test Command'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
